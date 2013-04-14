@@ -13,7 +13,6 @@ PBL_APP_INFO(MY_UUID,
 Window window;
 Layer bars_layer;
 TextLayer text_time_layer;
-static char time_text[] = "00:00";
 static int iScreenWidth=144;
 static int iScreenHeight=168;
 //static int iStatusBarHeight=16;
@@ -24,7 +23,7 @@ void handle_tick(AppContextRef ctx, PebbleTickEvent *t) {
     (void)ctx;
     
     // Need to be static because they're used by the system later.
-    static char time_text[] = "00:00";
+    static char time_text[] = "00:00:00";
     //static char date_text[] = "Xxxxxxxxx 00";
     
     char *time_format;
@@ -37,7 +36,7 @@ void handle_tick(AppContextRef ctx, PebbleTickEvent *t) {
     if (clock_is_24h_style()) {
         time_format = "%R";
     } else {
-        time_format = "%I:%M";
+        time_format = "%I:%M:%I";
     }
     
     string_format_time(time_text, sizeof(time_text), time_format, t->tick_time);
@@ -107,7 +106,16 @@ void handle_init(AppContextRef ctx) {
   window_init(&window, "Window Name");
   window_stack_push(&window, true /* Animated */);
     window_set_background_color(&window, GColorBlack);
-        
+    
+    resource_init_current_app(&APP_RESOURCES);
+
+    
+    // bars
+    layer_init(&bars_layer, window.layer.frame);
+    bars_layer.update_proc = &bars_layer_update_callback;
+    layer_add_child(&window.layer, &bars_layer);
+    
+
     // time
     text_layer_init(&text_time_layer, window.layer.frame);
     text_layer_set_text_color(&text_time_layer, GColorWhite);
@@ -116,10 +124,7 @@ void handle_init(AppContextRef ctx) {
     text_layer_set_font(&text_time_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
     layer_add_child(&window.layer, &text_time_layer.layer);
     
-    // bars
-    layer_init(&bars_layer, window.layer.frame);
-    bars_layer.update_proc = &bars_layer_update_callback;
-    layer_add_child(&window.layer, &bars_layer);
+   
     
 }
 
