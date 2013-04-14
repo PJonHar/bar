@@ -18,7 +18,7 @@ static int iScreenWidth=144;
 static int iScreenHeight=168;
 //static int iStatusBarHeight=16;
 
-
+// Taken from Simplicity
 void handle_tick(AppContextRef ctx, PebbleTickEvent *t) {
     (void)t;
     (void)ctx;
