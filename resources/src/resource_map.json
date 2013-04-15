@@ -4,7 +4,7 @@
  "media": [
         {
         "type": "png",
-        "defName": "IMAGE_MENU_ICON",
+        "defName": "IMAGE_MENU_ICON_BAR",
         "file": "images/menu_icon_bar.png"
         }
  ]
