@@ -100,8 +100,8 @@ void bars_layer_update_callback(Layer *me, GContext* ctx) {
         graphics_draw_line(ctx, GPoint(iPointThree[0], iPointFour), GPoint(iPointThree[1], iPointFour));
     }
     
-    if (current_time.tm_min==0&&current_time.tm_sec==0) {
-        void vibes_double_pulse(void);
+    if ((current_time.tm_min==0)&&(current_time.tm_sec==0)) {
+        vibes_double_pulse();
     }
 
 }
