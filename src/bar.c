@@ -8,7 +8,7 @@
 #define MY_UUID { 0x95, 0xD4, 0x0E, 0xBE, 0xAD, 0x89, 0x44, 0x6F, 0x81, 0x68, 0x04, 0x0D, 0xB5, 0x02, 0x7D, 0x1C }
 PBL_APP_INFO(MY_UUID,
              "Bar Clock", "PJonHar",
-             0, 3, /* App version */
+             1, 0, /* App version */
              RESOURCE_ID_IMAGE_MENU_ICON_BAR,
              APP_INFO_WATCH_FACE);
 			 
