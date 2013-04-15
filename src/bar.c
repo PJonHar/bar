@@ -19,13 +19,14 @@ TextLayer text_date_layer, text_month_layer, text_year_layer;
 int i, iBarWidth, iBarHeight, iBarStart;
 int iPointOne[2], iPointTwo[2], iPointThree[2], iPointFour;
 PblTm current_time;
+int iFontSize;
 
 void bar_Calculations() {
     
-    iBarStart=135;
+    iBarStart=130;
     
     // Bar Dimensions
-    iBarHeight=SCREEN_HEIGHT-(SCREEN_HEIGHT-iBarStart)-30;
+    iBarHeight=SCREEN_HEIGHT-(SCREEN_HEIGHT-iBarStart)-38;
     iBarWidth=(SCREEN_WIDTH-20)/3;
     
     // Bar Width Start
@@ -55,7 +56,7 @@ void handle_tick(AppContextRef ctx, PebbleTickEvent *t) {
     
     
     // time
-    string_format_time(hour_text, sizeof(hour_text), "%R", t->tick_time);
+    string_format_time(hour_text, sizeof(hour_text), "%H", t->tick_time);
 	string_format_time(min_text, sizeof(min_text), "%M", t->tick_time);
 	string_format_time(sec_text, sizeof(sec_text), "%S", t->tick_time);
     
@@ -98,6 +99,10 @@ void bars_layer_update_callback(Layer *me, GContext* ctx) {
         iPointFour=iBarStart-(i);
         graphics_draw_line(ctx, GPoint(iPointThree[0], iPointFour), GPoint(iPointThree[1], iPointFour));
     }
+    
+    if (current_time.tm_min==0&&current_time.tm_sec==0) {
+        void vibes_double_pulse(void);
+    }
 
 }
 
@@ -112,6 +117,8 @@ void handle_init(AppContextRef ctx) {
     
     bar_Calculations();
     
+    iFontSize=28;
+    
     // bars
     layer_init(&bars_layer, window.layer.frame);
     bars_layer.update_proc = &bars_layer_update_callback;
@@ -119,50 +126,50 @@ void handle_init(AppContextRef ctx) {
     
     // time
 	// hour
-    text_layer_init(&text_hour_layer, window.layer.frame);
+    text_layer_init(&text_hour_layer, GRect(iPointOne[0], 130, iBarWidth, 38));
     text_layer_set_text_color(&text_hour_layer, GColorWhite);
     text_layer_set_background_color(&text_hour_layer, GColorClear);
-    layer_set_frame(&text_hour_layer.layer, GRect(iPointOne[0]+(iBarWidth/3)-2.5, 135, iPointOne[1], SCREEN_HEIGHT-135));
+    text_layer_set_text_alignment(&text_hour_layer, GTextAlignmentCenter);
     text_layer_set_font(&text_hour_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
     layer_add_child(&window.layer, &text_hour_layer.layer);
 
 	// min
-	text_layer_init(&text_min_layer, window.layer.frame);
+	text_layer_init(&text_min_layer, GRect(iPointTwo[0], 130, iBarWidth, 38));
     text_layer_set_text_color(&text_min_layer, GColorWhite);
     text_layer_set_background_color(&text_min_layer, GColorClear);
-    layer_set_frame(&text_min_layer.layer, GRect(iPointTwo[0]+(iBarWidth/3)-2.5, 135, iPointTwo[1], SCREEN_HEIGHT-135));
+    text_layer_set_text_alignment(&text_min_layer, GTextAlignmentCenter);
     text_layer_set_font(&text_min_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
     layer_add_child(&window.layer, &text_min_layer.layer);
 
 	// sec
-	text_layer_init(&text_sec_layer, window.layer.frame);
+	text_layer_init(&text_sec_layer, GRect(iPointThree[0], 130, iBarWidth, 38));
     text_layer_set_text_color(&text_sec_layer, GColorWhite);
     text_layer_set_background_color(&text_sec_layer, GColorClear);
-    layer_set_frame(&text_sec_layer.layer, GRect(iPointThree[0]+(iBarWidth/3)-2.5, 135, iPointThree[1], SCREEN_HEIGHT-135));
+    text_layer_set_text_alignment(&text_sec_layer, GTextAlignmentCenter);
     text_layer_set_font(&text_sec_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
     layer_add_child(&window.layer, &text_sec_layer.layer);
 
 	// date
-    text_layer_init(&text_date_layer, window.layer.frame);
+    text_layer_init(&text_date_layer, GRect(iPointOne[0], 5, iBarWidth, 38));
     text_layer_set_text_color(&text_date_layer, GColorWhite);
     text_layer_set_background_color(&text_date_layer, GColorClear);
-    layer_set_frame(&text_date_layer.layer, GRect(iPointOne[0]+(iBarWidth/3)-2.5, 0, iPointOne[1], SCREEN_HEIGHT-0));
+    text_layer_set_text_alignment(&text_date_layer, GTextAlignmentCenter);
     text_layer_set_font(&text_date_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
     layer_add_child(&window.layer, &text_date_layer.layer);
     
     // month
-    text_layer_init(&text_month_layer, window.layer.frame);
+    text_layer_init(&text_month_layer, GRect(iPointTwo[0], 5, iBarWidth, 38));
     text_layer_set_text_color(&text_month_layer, GColorWhite);
     text_layer_set_background_color(&text_month_layer, GColorClear);
-    layer_set_frame(&text_month_layer.layer, GRect(iPointTwo[0]+(iBarWidth/3)-2.5, 0, iPointTwo[1], SCREEN_HEIGHT-0));
+    text_layer_set_text_alignment(&text_month_layer, GTextAlignmentCenter);
     text_layer_set_font(&text_month_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
     layer_add_child(&window.layer, &text_month_layer.layer);
     
     // year
-    text_layer_init(&text_year_layer, window.layer.frame);
+    text_layer_init(&text_year_layer, GRect(iPointThree[0], 5, iBarWidth, 38));
     text_layer_set_text_color(&text_year_layer, GColorWhite);
     text_layer_set_background_color(&text_year_layer, GColorClear);
-    layer_set_frame(&text_year_layer.layer, GRect(iPointThree[0]+(iBarWidth/3)-2.5, 0, iPointThree[1], SCREEN_HEIGHT-0));
+    text_layer_set_text_alignment(&text_year_layer, GTextAlignmentCenter);
     text_layer_set_font(&text_year_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
     layer_add_child(&window.layer, &text_year_layer.layer);
     
